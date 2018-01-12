@@ -100,6 +100,61 @@ namespace InterviewAssigment
         {
             return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
         }
+        
+        public override async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        {
+            SignInStatus signInStatus;
+
+            if (this.UserManager != null)
+            {                
+                Task<ApplicationUser> userAwaiter = this.UserManager.FindByNameAsync(userName);
+
+                ApplicationUser User = await userAwaiter;
+                if (User != null)
+                {                    
+                   // User.Claims.Add(new UserClaim() { ClaimType = "UserToken", ClaimValue = string.Format("{0};{1}", userName, password) });//userApp.Session) });
+                    signInStatus = SignInStatus.Success;
+                }
+                else
+                {
+                    signInStatus = SignInStatus.Failure;
+                }
+            }
+            else
+            {
+                signInStatus = SignInStatus.Failure;
+            }
+
+            return signInStatus;
+        }
+
+        private async Task<SignInStatus> SignInOrTwoFactor(ApplicationUser user, bool isPersistent)
+        {
+            SignInStatus signInStatus;
+            string str = Convert.ToString(user.Id);
+            Task<bool> cultureAwaiter = this.UserManager.GetTwoFactorEnabledAsync(user.Id);
+            if (await cultureAwaiter)
+            {
+                Task<IList<string>> providerAwaiter = this.UserManager.GetValidTwoFactorProvidersAsync(user.Id);
+                IList<string> listProviders = await providerAwaiter;
+                if (listProviders.Count > 0)
+                {
+                    Task<bool> cultureAwaiter2 = AuthenticationManagerExtensions.TwoFactorBrowserRememberedAsync(this.AuthenticationManager, str);
+                    if (!await cultureAwaiter2)
+                    {
+                        ClaimsIdentity claimsIdentity = new ClaimsIdentity("TwoFactorCookie");
+                        claimsIdentity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", str));
+                        this.AuthenticationManager.SignIn(new ClaimsIdentity[] { claimsIdentity });
+                        signInStatus = SignInStatus.RequiresVerification;
+                        return signInStatus;
+                    }
+                }
+            }
+            Task cultureAwaiter3 = this.SignInAsync(user, isPersistent, false);
+            await cultureAwaiter3;
+            signInStatus = SignInStatus.Success;
+            return signInStatus;
+        }
 
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
