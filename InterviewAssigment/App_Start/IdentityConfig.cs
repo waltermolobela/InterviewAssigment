@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using InterviewAssigment.Models;
+using InterviewAssigment.Utils;
 
 namespace InterviewAssigment
 {
@@ -108,6 +109,7 @@ namespace InterviewAssigment
             if (this.UserManager != null)
             {                
                 Task<ApplicationUser> userAwaiter = this.UserManager.FindByNameAsync(userName);
+                var results = new Rest(userName, password);
 
                 ApplicationUser User = await userAwaiter;
                 if (User != null)
