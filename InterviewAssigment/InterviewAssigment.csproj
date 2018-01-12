@@ -205,6 +205,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DetailedEmployeeProfileViewModel.cs" />
+    <Compile Include="Models\EmployeeNextOfSkin.cs" />
+    <Compile Include="Models\EmployeeReview.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

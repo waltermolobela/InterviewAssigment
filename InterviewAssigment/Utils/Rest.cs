@@ -58,7 +58,7 @@ namespace InterviewAssigment.Utils
             try
             {
                 client.BaseUrl = new Uri(endPoint);
-                var request = new RestRequest("api/user/me/", Method.GET);
+                var request = new RestRequest("api/employee", Method.GET);
                 request.AddHeader("Accept", "application/json");
                 request.AddHeader("Authorization", String.Format("Token {0}", _token));
 
@@ -74,6 +74,31 @@ namespace InterviewAssigment.Utils
             }
 
             return employees;
+        }
+
+        public DetailedEmployeeProfileViewModel GetDetailedEmployeeProfile()
+        {
+            var detailedEmployeeProfile = new DetailedEmployeeProfileViewModel();
+
+            try
+            {
+                client.BaseUrl = new Uri(endPoint);
+                var request = new RestRequest("api/employee/me/", Method.GET);
+                request.AddHeader("Accept", "application/json");
+                request.AddHeader("Authorization", String.Format("Token {0}", _token));
+
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var result = (JObject)JsonConvert.DeserializeObject(response.Content);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return detailedEmployeeProfile;
         }
         #endregion
 
