@@ -19,6 +19,11 @@ namespace InterviewAssigment.Utils
         private static string endPoint = System.Configuration.ConfigurationManager.AppSettings["url"];
         #endregion
 
+        public Rest(string token)
+        {
+            _token = token;
+        }
+
         public Rest(string username, string password)
         {
             _token = LoginUser(username, password);
