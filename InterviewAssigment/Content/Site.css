@@ -22,3 +22,43 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.navbar-inverse {
+    background-color: #004460;
+    color: #ffffff;
+}
+
+.navbar-nav {
+    margin-top: 5%;
+}
+
+.btn-default {
+    background-color: #d4b959;
+    color: #000000;
+    font-weight: bold;
+}
+
+    .btn-default:hover, .btn-default:active {
+        background-color: #9f893b;
+    }
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #d4b959;
+    margin: 1em 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Set black background color, white text and some padding */
+footer {
+    position: fixed;
+    height: 40px;
+    bottom: 0;
+    width: 100%;
+    background-color: #004460;
+    color: #ffffff;
+    padding: 8px;
+}
