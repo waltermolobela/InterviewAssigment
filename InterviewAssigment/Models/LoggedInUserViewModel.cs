@@ -7,6 +7,6 @@ namespace InterviewAssigment.Models
 {
     public class LoggedInUserViewModel : User
     {     
-        public bool IsSuperuser { get; set; }
+        public bool Is_Superuser { get; set; }
     }
 }

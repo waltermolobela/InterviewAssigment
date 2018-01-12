@@ -110,8 +110,8 @@ namespace InterviewAssigment
             {                
                 Task<ApplicationUser> userAwaiter = this.UserManager.FindByNameAsync(userName);
 
-                var results = new Rest(userName, password);
-                var userToken = results._token;
+                var rest = new Rest(userName, password);
+                var userToken = rest._token;
 
                 ApplicationUser User = await userAwaiter;
                 if (User != null)

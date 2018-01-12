@@ -40,13 +40,10 @@ namespace InterviewAssigment.Utils
                 var request = new RestRequest("api/user/me/", Method.GET);
                 request.AddHeader("Accept", "application/json");
                 request.AddHeader("Authorization", String.Format("Token {0}", _token));
-
                 IRestResponse response = client.Execute(request);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var result = (JObject)JsonConvert.DeserializeObject(response.Content);
-                    loggedInUser.Email = result["email"]?.ToString();
-                }
+
+                if (response.StatusCode == HttpStatusCode.OK)               
+                    loggedInUser = JsonConvert.DeserializeObject<LoggedInUserViewModel>(response.Content); 
             }
             catch (Exception ex)
             {
@@ -66,12 +63,10 @@ namespace InterviewAssigment.Utils
                 var request = new RestRequest("api/employee", Method.GET);
                 request.AddHeader("Accept", "application/json");
                 request.AddHeader("Authorization", String.Format("Token {0}", _token));
-
                 IRestResponse response = client.Execute(request);
+
                 if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var result = (JObject)JsonConvert.DeserializeObject(response.Content);                  
-                }
+                    employees = JsonConvert.DeserializeObject<List<EmployeeViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -91,12 +86,12 @@ namespace InterviewAssigment.Utils
                 var request = new RestRequest("api/employee/me/", Method.GET);
                 request.AddHeader("Accept", "application/json");
                 request.AddHeader("Authorization", String.Format("Token {0}", _token));
-
                 IRestResponse response = client.Execute(request);
+
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var result = (JObject)JsonConvert.DeserializeObject(response.Content);
-                }
+                    detailedEmployeeProfile = JsonConvert.DeserializeObject<DetailedEmployeeProfileViewModel>(response.Content);
+                }                   
             }
             catch (Exception ex)
             {
@@ -108,6 +103,7 @@ namespace InterviewAssigment.Utils
         #endregion
 
         #region private methods
+       
         private string LoginUser(string userName, string password)
         {
             var token = string.Empty;

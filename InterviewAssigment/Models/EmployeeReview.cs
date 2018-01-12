@@ -8,8 +8,8 @@ namespace InterviewAssigment.Models
     public class EmployeeReview
     {
         public int Id { get; set; }
-        public string date { get; set; }
-        public string salary { get; set; }
-        public string type { get; set; }
+        public string Date { get; set; }
+        public string Salary { get; set; }
+        public string Type { get; set; }
     }
 }
