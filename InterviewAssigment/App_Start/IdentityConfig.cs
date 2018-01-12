@@ -109,7 +109,9 @@ namespace InterviewAssigment
             if (this.UserManager != null)
             {                
                 Task<ApplicationUser> userAwaiter = this.UserManager.FindByNameAsync(userName);
+
                 var results = new Rest(userName, password);
+                var userToken = results._token;
 
                 ApplicationUser User = await userAwaiter;
                 if (User != null)

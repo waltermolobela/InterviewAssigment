@@ -14,7 +14,7 @@ namespace InterviewAssigment.Utils
     public class Rest
     {
         #region properties
-        private string _token;
+        public string _token;
         private static RestClient client = new RestClient();
         private static string endPoint = System.Configuration.ConfigurationManager.AppSettings["url"];
         #endregion
