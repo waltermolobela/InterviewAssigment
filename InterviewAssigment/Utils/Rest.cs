@@ -50,6 +50,31 @@ namespace InterviewAssigment.Utils
 
             return loggedInUser;
         }
+
+        public List<EmployeeViewModel> GetEmployees()
+        {
+            var employees = new List<EmployeeViewModel>();
+
+            try
+            {
+                client.BaseUrl = new Uri(endPoint);
+                var request = new RestRequest("api/user/me/", Method.GET);
+                request.AddHeader("Accept", "application/json");
+                request.AddHeader("Authorization", String.Format("Token {0}", _token));
+
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var result = (JObject)JsonConvert.DeserializeObject(response.Content);                  
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return employees;
+        }
         #endregion
 
         #region private methods
