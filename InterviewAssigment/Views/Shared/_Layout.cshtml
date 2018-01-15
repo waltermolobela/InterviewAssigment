@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Tangent Solutions</title>
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css")  
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -20,21 +21,18 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav"></ul>
-            </div>
+                @Html.Partial("_LoginPartial")
+            </div>            
         </div>
     </div>
     <div class="container body-content">
-        <br /><br />
-        <p>
-            @RenderBody()
-        </p>
-
+        <br /><br />       
+            @RenderBody()   
     </div>
     <footer>
         <p class="container body-content">&copy; @DateTime.Now.Year - Tangent Solutions Application</p>
     </footer>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/bootstrap")   
     @RenderSection("scripts", required: false)
 </body>
 </html>

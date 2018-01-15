@@ -6,6 +6,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using InterviewAssigment.Models;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace InterviewAssigment
 {
@@ -15,7 +17,7 @@ namespace InterviewAssigment
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+           // app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
@@ -26,6 +28,7 @@ namespace InterviewAssigment
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
+                CookieName = GetType().Namespace,
                 Provider = new CookieAuthenticationProvider
                 {
                     // Enables the application to validate the security stamp when the user logs in.
@@ -64,5 +67,33 @@ namespace InterviewAssigment
             //    ClientSecret = ""
             //});
         }
+
+        int GetUserId(ClaimsIdentity identity)
+        {
+            return identity.GetUserId<int>();
+        }
+
+        public Func<ApplicationUserManager, ApplicationUser, Task<ClaimsIdentity>> GenerateIdentity;
+
+        private Task GetInfo(CookieValidateIdentityContext cntxt)
+        {
+            //var res= _onValidateIdentity(cntxt);
+            //var result = new TaskCompletionSource();
+            return Task.FromResult(0);
+            /*
+            if (cntxt.Identity != null)
+            {
+                int userId = GetUserId(cntxt.Identity);
+                if (userId > 0)
+                {
+                    DnsCachedLogin.FindorLoadUserAndLogin(userId);
+
+                }
+            }
+
+            return Task.FromResult(0);
+             * */
+        }
+
     }
 }

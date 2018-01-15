@@ -28,9 +28,6 @@ textarea {
     color: #ffffff;
 }
 
-.navbar-nav {
-    margin-top: 5%;
-}
 
 .btn-default {
     background-color: #d4b959;
@@ -38,9 +35,9 @@ textarea {
     font-weight: bold;
 }
 
-    .btn-default:hover, .btn-default:active {
-        background-color: #9f893b;
-    }
+.btn-default:hover, .btn-default:active {
+    background-color: #9f893b;
+}
 
 hr {
     display: block;

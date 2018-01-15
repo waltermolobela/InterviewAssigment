@@ -12,6 +12,10 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using InterviewAssigment.Models;
 using InterviewAssigment.Utils;
+using System.Security.Principal;
+using Microsoft.Owin.Infrastructure;
+using Microsoft.Owin.Security.Cookies;
+using System.Web.Mvc;
 
 namespace InterviewAssigment
 {
@@ -101,20 +105,39 @@ namespace InterviewAssigment
         {
             return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
         }
-        
+
+        //public async override Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        //{
+        //    var user = await UserManager.FindByNameAsync(userName);
+        //    IUserApiRequest authenticationRepository = new UserApiRequest();
+        //    var userApp = authenticationRepository.LoginUser(userName, password);
+        //    user.AppUser.Session = userApp.Session;
+
+        //    user.Claims.Add(new UserClaim() { ClaimType = "UserToken", ClaimValue = string.Format("{0};{1}", userName, password) });//userApp.Session) });
+
+        //    if (user == null)// && user.PasswordHash != password)
+        //        return SignInStatus.Failure;
+        //    return await SignInOrTwoFactor(user, isPersistent);
+        //}
+
         public override async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
             SignInStatus signInStatus;
 
             if (this.UserManager != null)
-            {                
-                Task<ApplicationUser> userAwaiter = this.UserManager.FindByNameAsync(userName);
+            {                   
+                var user = await UserManager.FindByNameAsync(userName);
+                
+                //var rest = new Rest(userName, password);
+                // var userToken = rest._token;
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationType);
+                identity.AddClaim(new Claim("username", "walter"));
+                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                identity.AddClaim(new Claim(ClaimTypes.Name, "Walter Molobela"));
+                identity.AddClaim(new Claim("token", "12345"));
+                this.AuthenticationManager.SignIn(new ClaimsIdentity[] { identity });
 
-                var rest = new Rest(userName, password);
-                var userToken = rest._token;
-
-                ApplicationUser User = await userAwaiter;
-                if (User != null)
+                if (identity != null)
                 {                    
                    // User.Claims.Add(new UserClaim() { ClaimType = "UserToken", ClaimValue = string.Format("{0};{1}", userName, password) });//userApp.Session) });
                     signInStatus = SignInStatus.Success;
@@ -132,32 +155,24 @@ namespace InterviewAssigment
             return signInStatus;
         }
 
+
+
         private async Task<SignInStatus> SignInOrTwoFactor(ApplicationUser user, bool isPersistent)
         {
-            SignInStatus signInStatus;
-            string str = Convert.ToString(user.Id);
-            Task<bool> cultureAwaiter = this.UserManager.GetTwoFactorEnabledAsync(user.Id);
-            if (await cultureAwaiter)
-            {
-                Task<IList<string>> providerAwaiter = this.UserManager.GetValidTwoFactorProvidersAsync(user.Id);
-                IList<string> listProviders = await providerAwaiter;
-                if (listProviders.Count > 0)
-                {
-                    Task<bool> cultureAwaiter2 = AuthenticationManagerExtensions.TwoFactorBrowserRememberedAsync(this.AuthenticationManager, str);
-                    if (!await cultureAwaiter2)
-                    {
-                        ClaimsIdentity claimsIdentity = new ClaimsIdentity("TwoFactorCookie");
-                        claimsIdentity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", str));
-                        this.AuthenticationManager.SignIn(new ClaimsIdentity[] { claimsIdentity });
-                        signInStatus = SignInStatus.RequiresVerification;
-                        return signInStatus;
-                    }
-                }
-            }
-            Task cultureAwaiter3 = this.SignInAsync(user, isPersistent, false);
-            await cultureAwaiter3;
-            signInStatus = SignInStatus.Success;
-            return signInStatus;
+            //var id = Convert.ToString(user.Id);
+            //TODO: implement two factor login
+            //if (await UserManager.GetTwoFactorEnabledAsync(user.Id)
+            //	&& (await UserManager.GetValidTwoFactorProvidersAsync(user.Id)).Count > 0
+            //	&& !await AuthenticationManager.TwoFactorBrowserRememberedAsync(id))
+            //{
+            //var identity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorCookie);
+            //identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
+            //AuthenticationManager.SignIn(identity);
+            //return SignInStatus.RequiresVerification;
+            //}
+            await SignInAsync(user, isPersistent, false);
+
+            return SignInStatus.Success;
         }
 
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
