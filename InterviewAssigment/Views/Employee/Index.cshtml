@@ -1,4 +1,5 @@
-﻿@model List<InterviewAssigment.Models.EmployeeViewModel>
+﻿@using System.Globalization;
+@model List<InterviewAssigment.Models.EmployeeViewModel>
 @{
     ViewBag.Title = "Dashboard";
 }
@@ -8,35 +9,21 @@
         <div class="small-box bg-aqua">
             <div class="inner">
                 <p>Number Of Employees</p>
-                <h3>150</h3>
+                <h3>@Model.Count()</h3>
             </div>
             <div class="icon">
                 <i class="ion ion-bag"></i>
             </div>
             <a href="#" class="small-box-footer"><br />@*More info*@ <i class="fa fa-arrow-circle-right"></i></a>
         </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-xs-6">
-        <!-- small box -->
-        <div class="small-box bg-green">
-            <div class="inner">
-                <p>Number Of Birthdays This Month</p>
-                <h3>3</h3>
-            </div>
-            <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer"><br />@*More info*@ <i class="fa fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
+    </div>    
     <!-- ./col -->
     <div class="col-lg-3 col-xs-6">
         <!-- small box -->
         <div class="small-box bg-yellow">
             <div class="inner">               
-                <p>User Projects</p>
-                <h3>44</h3>
+                <p>Number Of Females</p>
+                <h3>@Model.Where(x => x.Gender == "M").ToList().Count()</h3>
             </div>
             <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -49,13 +36,27 @@
         <!-- small box -->
         <div class="small-box bg-red">
             <div class="inner">               
-                <p>Number Of Groups</p>
-                <h3>65</h3>
+                <p>Number Of Males</p>
+                <h3>@Model.Where(x => x.Gender == "F").ToList().Count()</h3>
             </div>
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>
             </div>
             <a href="#" class="small-box-footer"><br />@*More info*@  <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-green">
+            <div class="inner">
+                <p>Number Of Birthdays This Month</p>
+                <h3>@Model.Where(x => DateTime.ParseExact(x.Birth_Date, "yyyy-MM-dd", CultureInfo.InvariantCulture).Month == DateTime.Now.Month).ToList().Count()</h3>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer"><br />@*More info*@ <i class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -75,7 +76,7 @@
                                 <td>Last Name</td>
                                 <td>Email</td>
                                 <td>Status</td>
-                                <td>Staff Member</td>
+                                <td>Position</td>
                             </tr>
                              @foreach (var item in Model)
                              {
@@ -91,7 +92,7 @@
                                     {
                                     <td>InActive</td>
                                     }                                    
-                                    <td>@Html.DisplayFor(modelItem => item.User.Is_Staff)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Position.Name)</td>
                                 </tr>
                              }                                                  
                         </tbody>                      
