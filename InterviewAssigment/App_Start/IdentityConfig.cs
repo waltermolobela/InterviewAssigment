@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using InterviewAssigment.Models;
+using InterviewAssigment.AuthHelpers;
 using InterviewAssigment.Utils;
-using System.Security.Principal;
-using Microsoft.Owin.Infrastructure;
-using Microsoft.Owin.Security.Cookies;
-using System.Web.Mvc;
 
 namespace InterviewAssigment
 {
@@ -38,18 +29,24 @@ namespace InterviewAssigment
     }
 
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
-    public class ApplicationUserManager : UserManager<ApplicationUser>
+    public class ApplicationUserManager : UserManager<ApplicationUser, string>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
-            : base(store)
+        //public ApplicationUserManager(IUserStore<ApplicationUser, int> store)
+        //	: base(store)
+        //{
+        //}
+        public ApplicationUserManager()
+            : base(new CustomUserStore())
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+            //var manager = new ApplicationUserManager(new UserStore<ApplicationUser, CustomRole, int, UserLogin, UserRole, UserClaim>(context.Get<ApplicationDbContext>()));
+            var manager = new ApplicationUserManager();
             // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+            manager.UserValidator = new UserValidator<ApplicationUser, string>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
@@ -59,10 +56,10 @@ namespace InterviewAssigment
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
 
             // Configure user lockout defaults
@@ -72,11 +69,11 @@ namespace InterviewAssigment
 
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
             // You can write your own provider and plug it in here.
-            manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
+            manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser, string>
             {
                 MessageFormat = "Your security code is {0}"
             });
-            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
+            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser, string>
             {
                 Subject = "Security Code",
                 BodyFormat = "Your security code is {0}"
@@ -86,8 +83,8 @@ namespace InterviewAssigment
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                manager.UserTokenProvider =
+                    new DataProtectorTokenProvider<ApplicationUser, string>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
         }
@@ -106,56 +103,28 @@ namespace InterviewAssigment
             return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
         }
 
-        //public async override Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
-        //{
-        //    var user = await UserManager.FindByNameAsync(userName);
-        //    IUserApiRequest authenticationRepository = new UserApiRequest();
-        //    var userApp = authenticationRepository.LoginUser(userName, password);
-        //    user.AppUser.Session = userApp.Session;
-
-        //    user.Claims.Add(new UserClaim() { ClaimType = "UserToken", ClaimValue = string.Format("{0};{1}", userName, password) });//userApp.Session) });
-
-        //    if (user == null)// && user.PasswordHash != password)
-        //        return SignInStatus.Failure;
-        //    return await SignInOrTwoFactor(user, isPersistent);
-        //}
-
-        public override async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
-            SignInStatus signInStatus;
-
-            if (this.UserManager != null)
-            {                   
-                var user = await UserManager.FindByNameAsync(userName);
-                
-                //var rest = new Rest(userName, password);
-                // var userToken = rest._token;
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationType);
-                identity.AddClaim(new Claim("username", "walter"));
-                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-                identity.AddClaim(new Claim(ClaimTypes.Name, "Walter Molobela"));
-                identity.AddClaim(new Claim("token", "12345"));
-                this.AuthenticationManager.SignIn(new ClaimsIdentity[] { identity });
-
-                if (identity != null)
-                {                    
-                   // User.Claims.Add(new UserClaim() { ClaimType = "UserToken", ClaimValue = string.Format("{0};{1}", userName, password) });//userApp.Session) });
-                    signInStatus = SignInStatus.Success;
-                }
-                else
-                {
-                    signInStatus = SignInStatus.Failure;
-                }
-            }
-            else
-            {
-                signInStatus = SignInStatus.Failure;
-            }
-
-            return signInStatus;
+            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
 
+        public async override Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        {
+            var user = await UserManager.FindByNameAsync(userName);           
+            var rest = new Rest(userName, password);      
 
+            if(String.IsNullOrEmpty(rest._token))
+                return SignInStatus.Failure;
+           
+            var loggedInUser = rest.GetLoggedInUser();
+            user.AppUser.UserId = loggedInUser.Id.ToString();
+            user.AppUser.UserName = loggedInUser.Username;           
+            user.Claims.Add(new UserClaim() { ClaimType = "UserToken", ClaimValue = rest._token });//userApp.Session) });
+            
+            if (user == null)// && user.PasswordHash != password)
+                return SignInStatus.Failure;
+            return await SignInOrTwoFactor(user, isPersistent);
+        }
 
         private async Task<SignInStatus> SignInOrTwoFactor(ApplicationUser user, bool isPersistent)
         {
@@ -173,11 +142,6 @@ namespace InterviewAssigment
             await SignInAsync(user, isPersistent, false);
 
             return SignInStatus.Success;
-        }
-
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
-        {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
 }

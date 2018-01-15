@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace InterviewAssigment.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class EmployeeController : Controller
     {
         // GET: Employee
