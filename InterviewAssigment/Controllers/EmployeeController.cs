@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InterviewAssigment.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,7 +13,9 @@ namespace InterviewAssigment.Controllers
         // GET: Employee
         public ActionResult Index()
         {
-            return View();
+            var token = ((System.Security.Claims.ClaimsIdentity)User.Identity).Claims.Where(x => x.Type.Contains("UserToken")).FirstOrDefault().Value;
+            var result = new Rest(token);  
+            return View(result.GetEmployees());            
         }
     }
 }

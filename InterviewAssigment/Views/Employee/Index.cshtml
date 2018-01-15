@@ -1,4 +1,4 @@
-﻿
+﻿@model List<InterviewAssigment.Models.EmployeeViewModel>
 @{
     ViewBag.Title = "Dashboard";
 }
@@ -77,13 +77,24 @@
                                 <td>Status</td>
                                 <td>&nbsp;</td>
                             </tr>
-                            <tr role="row" class="even">                              
-                                <td class="sorting_1">Captain</td>
-                                <td>America</td>
-                                <td>captain@gmail.com</td>
-                                <td>Active</td>
-                                <td><a href="">View Details</a></td>
-                            </tr>                            
+                             @foreach (var item in Model)
+                             {
+                                <tr role="row" class="even">
+                                    <td class="sorting_1">@Html.DisplayFor(modelItem => item.User.First_Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.User.Last_Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.User.Email)</td>
+                                    @if(item.User.Is_Active)
+                                    {
+                                    <td>Active</td>
+                                    }
+                                    else
+                                    {
+                                    <td>InActive</td>
+                                    }                                    
+                                    <td><a href="">View Details</a></td>
+                                </tr>
+
+                             }                                                  
                         </tbody>                      
                     </table>
                 </div>

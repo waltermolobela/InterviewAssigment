@@ -40,6 +40,7 @@ namespace InterviewAssigment.Utils
                 var request = new RestRequest("api/user/me/", Method.GET);
                 request.AddHeader("Accept", "application/json");
                 request.AddHeader("Authorization", String.Format("Token {0}", _token));
+                request.RequestFormat = DataFormat.Json;
                 IRestResponse response = client.Execute(request);
 
                 if (response.StatusCode == HttpStatusCode.OK)               
@@ -59,11 +60,12 @@ namespace InterviewAssigment.Utils
 
             try
             {
-                client.BaseUrl = new Uri(endPoint);
-                var request = new RestRequest("api/employee", Method.GET);
+                client.BaseUrl = new Uri(endPoint);               
+                var request = new RestRequest("api/employee/", Method.GET);
                 request.AddHeader("Accept", "application/json");
                 request.AddHeader("Authorization", String.Format("Token {0}", _token));
-                IRestResponse response = client.Execute(request);
+                request.RequestFormat = DataFormat.Json;
+                IRestResponse response = client.Execute(request);               
 
                 if (response.StatusCode == HttpStatusCode.OK)
                     employees = JsonConvert.DeserializeObject<List<EmployeeViewModel>>(response.Content);
