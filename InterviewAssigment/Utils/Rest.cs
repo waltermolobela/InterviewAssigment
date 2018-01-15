@@ -94,6 +94,14 @@ namespace InterviewAssigment.Utils
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     detailedEmployeeProfile = JsonConvert.DeserializeObject<DetailedEmployeeProfileViewModel>(response.Content);
+
+                    var listOfEmployeeReview = JsonConvert.DeserializeObject<JObject>(response.Content)["employee_review"];
+                    if(listOfEmployeeReview != null)
+                        detailedEmployeeProfile.EmployeeReview = listOfEmployeeReview.ToObject<List<EmployeeReview>>();
+
+                    var listOfEmployeeNextOfSkin = JsonConvert.DeserializeObject<JObject>(response.Content)["employee_next_of_kin"];
+                    if (listOfEmployeeNextOfSkin != null)
+                        detailedEmployeeProfile.EmployeeNextOfSkin = listOfEmployeeNextOfSkin.ToObject<List<EmployeeNextOfSkin>>();
                 }                   
             }
             catch (Exception ex)

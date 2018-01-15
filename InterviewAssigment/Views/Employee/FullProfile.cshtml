@@ -6,9 +6,50 @@
 
 <h2>My Full Profile</h2>
 
-<div>    
+<div class="row">    
     <hr />
     <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.First_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.First_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Last_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Last_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Is_Active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Is_Active)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Is_Staff)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Is_Staff)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Id_Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id_Number)
+        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Id_Number)
         </dt>
@@ -179,6 +220,104 @@
 
     </dl>
 </div>
+<div class="row">
+    <h3>Postion</h3>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Position.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Position.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Position.Level)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Position.Level)
+        </dd>
+    </dl>
+</div>	
+
+<div class="row">
+    <h3>Employee Next Of Skin</h3>
+    <hr />
+    <dl class="dl-horizontal">
+          @foreach (var item in Model.EmployeeNextOfSkin)
+          {
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.Relationship)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Relationship)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.Phone_Number)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Phone_Number)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Email)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.Physical_Address)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Physical_Address)
+            </dd>
+          }
+    </dl>
+</div>
+
+<div class="row">
+    <h3>Employee Review</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        @foreach (var item in Model.EmployeeReview)
+        {
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.Date)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Date)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.Salary)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Salary)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.Type)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Type)
+            </dd>            
+        }
+    </dl>
+</div>
+
 <p>  
     @Html.ActionLink("Back to List", "Index")
 </p>
