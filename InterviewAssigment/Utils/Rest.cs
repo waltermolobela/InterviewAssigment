@@ -88,6 +88,7 @@ namespace InterviewAssigment.Utils
                 var request = new RestRequest("api/employee/me/", Method.GET);
                 request.AddHeader("Accept", "application/json");
                 request.AddHeader("Authorization", String.Format("Token {0}", _token));
+                request.RequestFormat = DataFormat.Json;
                 IRestResponse response = client.Execute(request);
 
                 if (response.StatusCode == HttpStatusCode.OK)

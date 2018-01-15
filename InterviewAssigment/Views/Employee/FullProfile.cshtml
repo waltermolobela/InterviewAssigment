@@ -1,0 +1,184 @@
+﻿@model InterviewAssigment.Models.DetailedEmployeeProfileViewModel
+
+@{
+    ViewBag.Title = "FullProfile";
+}
+
+<h2>My Full Profile</h2>
+
+<div>    
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id_Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id_Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone_Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone_Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Physical_Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Physical_Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tax_Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tax_Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Personal_Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Personal_Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Github_User)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Github_User)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Birth_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Birth_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Start_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Start_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.End_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.End_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Id_Document)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id_Document)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Visa_Document)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Visa_Document)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Employed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Employed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Foreigner)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Foreigner)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Race)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Race)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Years_Worked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Years_Worked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Age)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Age)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Next_Review)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Next_Review)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Days_To_Birthday)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Days_To_Birthday)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Leave_Remaining)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Leave_Remaining)
+        </dd>
+
+    </dl>
+</div>
+<p>  
+    @Html.ActionLink("Back to List", "Index")
+</p>
