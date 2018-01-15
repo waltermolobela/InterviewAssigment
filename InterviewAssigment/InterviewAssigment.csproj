@@ -294,6 +294,7 @@
     <Content Include="Dashboard\dist\js\dataTables.bootstrap.js" />
     <Content Include="Dashboard\dist\js\dataTables.bootstrap.min.js" />
     <Content Include="Dashboard\dist\js\demo.js" />
+    <Content Include="Dashboard\dist\js\jquery.dataTables.min.js" />
     <Content Include="Dashboard\dist\js\pages\dashboard.js" />
     <Content Include="Dashboard\dist\js\pages\dashboard2.js" />
     <Content Include="Content\bootstrap.css" />
